@@ -1,0 +1,178 @@
+openapi: "3.0.2"
+info:
+  title: Book API
+  version: "1.0"
+servers:
+  - url: http://localhost:9999
+
+paths:
+  /books:
+    get:
+      summary: Retrieve all books
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Book"
+    post:
+      summary: Create a new book with an image
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                category:
+                  type: string
+                subtitle:
+                  type: string
+                description:
+                  type: string
+                release_date:
+                  type: string
+                publisher:
+                  type: string
+                language:
+                  type: string
+                author:
+                  type: string
+                page_number:
+                  type: integer
+                  format: int32
+                rate:
+                  type: number
+                  format: float
+                owner:
+                  type: string
+                imagem:
+                  type: string
+                  format: binary
+              required:
+                - title
+                - author
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+
+  /books/{id}:
+    get:
+      summary: Retrieve a book by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the book to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        "404":
+          description: Book not found
+
+    put:
+      summary: Update a book by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the book to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        "400":
+          description: Bad request
+        "404":
+          description: Book not found
+
+    delete:
+      summary: Delete a book by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the book to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Book not found
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        subtitle:
+          type: string
+        description:
+          type: string
+        release_date:
+          type: string
+        publisher:
+          type: string
+        language:
+          type: string
+        author:
+          type: string
+        page_number:
+          type: integer
+          format: int32
+        imagem:
+          type: string
+        rate:
+          type: number
+          format: float
+        owner:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
