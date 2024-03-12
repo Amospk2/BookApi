@@ -218,7 +218,7 @@ func TestBookCreateWithImage(t *testing.T) {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, _ := writer.CreateFormFile("file", "1710107242.png")
+	part, _ := writer.CreateFormFile("imagem", "1710107242.png")
 
 	io.Copy(part, file)
 

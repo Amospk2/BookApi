@@ -67,7 +67,7 @@ func replaceBookForBookRequest(bookRequest *book.Book, book *book.Book) {
 }
 
 func uploadImage(r *http.Request) error {
-	file, handler, err := r.FormFile("file")
+	file, handler, err := r.FormFile("imagem")
 
 	if err != nil {
 		return nil
