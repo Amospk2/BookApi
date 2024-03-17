@@ -1,6 +1,16 @@
 version: '3.5'
 services:
 
+  api:
+    build:
+      context: .
+    ports:
+      - 9999:9999
+    environment:
+      SECRET: BookApi
+      DATABASE_URL: postgresql://postgres:1234567890@postgres:5432/postgres
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres
