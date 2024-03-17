@@ -260,6 +260,9 @@ func TestBookCreateWithImage(t *testing.T) {
 	book := book.Book{}
 	json.Unmarshal(rr.Body.Bytes(), &book)
 
+	if !strings.Contains(book.Imagem, ".png") {
+		t.Errorf("Wrong filename")
+	}
 }
 
 func TestBookCreateWithoutImage(t *testing.T) {
@@ -308,10 +311,6 @@ func TestBookCreateWithoutImage(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
-
-	book := book.Book{}
-	json.Unmarshal(rr.Body.Bytes(), &book)
-
 }
 
 func TestBookUpdate(t *testing.T) {

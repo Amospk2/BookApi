@@ -66,7 +66,7 @@ func replaceBookForBookRequest(bookRequest *book.Book, book *book.Book) {
 	}
 }
 
-func uploadImage(r *http.Request) error {
+func uploadImage(r *http.Request, book *book.Book) error {
 	file, handler, err := r.FormFile("imagem")
 
 	if err != nil {
@@ -77,11 +77,11 @@ func uploadImage(r *http.Request) error {
 
 	imgSplited := strings.Split(handler.Filename, ".")
 
-	fileName := "public/book/" + fmt.Sprint(time.Now().Unix()) +
+	book.Imagem = "public/book/" + fmt.Sprint(time.Now().Unix()) +
 		"." + imgSplited[len(imgSplited)-1]
 
 	f, err := os.OpenFile(
-		fileName,
+		book.Imagem,
 		os.O_WRONLY|os.O_CREATE,
 		0666)
 
@@ -214,13 +214,13 @@ func (c *BookController) CreateBook() http.HandlerFunc {
 				return
 			}
 
-			if err := c.repository.Create(book); err != nil {
-				w.WriteHeader(http.StatusBadRequest)
+			if err := uploadImage(r, &book); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
 
-			if err := uploadImage(r); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
+			if err := c.repository.Create(book); err != nil {
+				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
 
