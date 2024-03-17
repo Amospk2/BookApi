@@ -13,10 +13,10 @@ type UserRouter struct {
 
 func (p *UserRouter) Load(mux *mux.Router) {
 	mux.HandleFunc("/user", middleware.AuthenticationMiddleware(p.controller.GetUsers())).Methods("GET")
-	mux.HandleFunc("/user/{id}", middleware.AuthenticationMiddleware(p.controller.GetUserById())).Methods("GET")
-	mux.HandleFunc("/user/{id}", middleware.AuthenticationMiddleware(p.controller.UpdateUser())).Methods("PUT")
+	mux.HandleFunc("/user/{id}", p.controller.GetUserById()).Methods("GET")
+	mux.HandleFunc("/user/{id}", p.controller.UpdateUser()).Methods("PUT")
 	mux.HandleFunc("/user/{id}", middleware.AuthenticationMiddleware(p.controller.Delete())).Methods("DELETE")
-	mux.HandleFunc("/user", middleware.AuthenticationMiddleware(p.controller.CreateUser())).Methods("POST")
+	mux.HandleFunc("/user", p.controller.CreateUser()).Methods("POST")
 }
 
 func NewUserRouter(
