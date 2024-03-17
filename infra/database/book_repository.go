@@ -17,8 +17,11 @@ func (db *BookRepository) Get() ([]book.Book, error) {
 	books := make([]book.Book, 0)
 
 	rows, err := db.pool.Query(context.Background(),
-		`select id, name
-		from public.books`,
+		`select
+			id, title, category, subtitle, description, release_date,
+			publisher, language, author, page_number, imagem, rate, owner
+		from 
+			public.books`,
 	)
 
 	if err != nil {
@@ -92,11 +95,14 @@ func (db *BookRepository) GetById(id string) (book.Book, error) {
 func (db *BookRepository) Update(data book.Book) error {
 	_, err := db.pool.Exec(
 		context.Background(),
-		`UPDATE books 
-		SET title = $1, category = $2, subtitle = $3, description = $4,
-		release_date = $5, language = $6, author = $7, page_number = $8,
-		imagem = $9, rate = $10, owner = $11
-		WHERE id = $12`,
+		`UPDATE 
+			books 
+		SET 
+			title = $1, category = $2, subtitle = $3, description = $4,
+			release_date = $5, language = $6, author = $7, page_number = $8,
+			imagem = $9, rate = $10, owner = $11
+		WHERE 
+			id = $12`,
 		&data.Title,
 		&data.Category,
 		&data.Subtitle,
